@@ -96,7 +96,7 @@ __local void rotl(stack_t **stack, __silent uint line_number)
 
 /**
  * rotr - stack op rotr
- * @stack: stack
+ * @stack: stack.
  * @line_number: line number
  */
 __local void rotr(stack_t **stack, __silent uint line_number)
