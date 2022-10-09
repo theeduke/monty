@@ -1,52 +1,37 @@
-#ifndef __MONTY_H
-#define __MONTY_H
+#ifndef MONTY_H
+#define MONTY_H
 
-#include <stdio.h>
+#include <stddef.h>
 #include <stdlib.h>
-#include <string.h>
 #include <ctype.h>
+#include <string.h>
+#include <stdio.h>
+#include<unistd.h>
+#include<fcntl.h>
+#include<sys/types.h>
+#include<sys/stat.h>
 
-#define __local __attribute__((weak))
-#define __silent __attribute__((unused))
-#define FAIL (exit(EXIT_FAILURE))
-#define PASS (exit(EXIT_SUCCESS))
-#define FAIL_ARGNUM (fprintf(stderr, "USAGE: monty file\n"), FAIL)
-#define FAIL_FILE(x) (fprintf(stderr, "Error: Can't open file %s\n", x), FAIL)
-#define FAIL_OPCODE(x, y) \
-	(fprintf(stderr, "L%d: unknown instruction %s\n", x, y), free(y), FAIL)
-#define FAIL_MALLOC (fprintf(stderr, "Error: malloc failed\n"), FAIL)
-#define fi if
-#define esle else
-#define new_struct struct
-
-typedef unsigned int uint;
-
-/**
- * enum modes - operation modes
- * @STACK: stack mode
- * @QUEUE: queue mode
- */
-enum modes
-{
-	STACK,
-	QUEUE
-};
-/**
- * struct state_s - state variable
- * @delim: delim
- * @token: token
- * @fp: file pointer
- * @line: file line
- * @mode: operation mode
- */
-typedef struct state_s
-{
-	char *token;
-	char *delim;
-	FILE *fp;
-	char *line;
-	int mode;
-} state_t;
+#define INSTRUCTIONS		    \
+	{			     \
+		{"push", push},       \
+		    {"pall", pall},   \
+		    {"pint", pint},   \
+		    {"pop", pop},     \
+		    {"swap", swap},   \
+		    {"nop", nop},     \
+		    {"div", _div},    \
+		    {"mul", _mul},    \
+		    {"add", add},    \
+		    {"sub", sub},    \
+		    {"mod", mod},     \
+		    {"pchar", pchar}, \
+		    {"pstr", pstr},   \
+		    {"rotl", rotl},   \
+		    {"rotr", rotr},   \
+		{		      \
+			NULL, NULL	\
+		}                     \
+	}
 
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
@@ -78,47 +63,69 @@ typedef struct instruction_s
 	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-state_t s = {
-	NULL,
-	"\n\t\a\r ;:",
-	NULL,
-	NULL,
-	STACK
-};
-
-
 /**
- * len - print doubly linked list
- * @h: list
- * Return: number of nodes
+ * struct help - argument for the current opcode
+ * @data_struct: stack mode, stack (default) and queue
+ * @argument: the arguments of the string
+ *
+ * Description: global structure used to pass data around the functions easily
  */
-__local size_t len(const stack_t *h)
+typedef struct help
 {
-	size_t nodes = 0;
+	int data_struct;
+	char *argument;
+} help;
+help global;
 
-	for (; h; nodes++)
-		h = h->next;
+/* stack utility functions available in linked_list.c */
+stack_t *add_node(stack_t **stack, const int n);
+stack_t *queue_node(stack_t **stack, const int n);
+void free_stack(stack_t *stack);
+size_t print_stack(const stack_t *stack);
 
-	return (nodes);
-}
+void push(stack_t **stack, unsigned int line_nums);
+void pall(stack_t **stack, unsigned int line_nums);
+void pint(stack_t **stack, unsigned int line_nums);
+void swap(stack_t **stack, unsigned int line_nums);
+void pop(stack_t **stack, unsigned int line_nums);
+void nop(stack_t **stack, unsigned int line_nums);
+void add(stack_t **stack, unsigned int line_nums);
+void opcode(stack_t **stack, char *str, unsigned int line_nums);
+void mod(stack_t **stack, unsigned int line_nums);
+void _div(stack_t **stack, unsigned int line_nums);
+void pchar(stack_t **stack, unsigned int line_nums);
+void pstr(stack_t **stack, unsigned int line_nums __attribute__((unused)));
+void rotr(stack_t **stack, unsigned int line_nums);
+void sub(stack_t **stack, unsigned int line_nums);
+void _mul(stack_t **stack, unsigned int line_nums);
+void rotl(stack_t **stack, unsigned int line_nums);
 
-/**
- * is_number - iterates each character of string to check of isdigit
- * @n: integer
- * Return: 0 if is number, else -1 if not
- */
-__local int is_number(const char *n)
-{
-	int i = 0;
 
-	if (*n == '-')
-		i = 1;
-	for (; *(n + i) != '\0'; i++)
-	{
-		if (isdigit(*(n + i)) == 0)
-		return (-1);
-	}
-	return (0);
-}
+int is_digit(char *string);
+int isnumber(char *str);
 
-#endif
+#endif /* MONTY_H */
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+                                                              1,0-1         All
+
