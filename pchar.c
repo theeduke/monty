@@ -6,7 +6,7 @@
 
 /**
  * pchar - prints the int at the top of the stack as char
- * @stack: stack given by main
+ * @stack: stack given by main.
  * @line_nums: amount of lines
  *
  * Return: void
